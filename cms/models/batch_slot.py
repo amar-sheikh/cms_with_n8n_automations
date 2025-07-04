@@ -1,6 +1,6 @@
 from django.core.exceptions import ValidationError
-from datetime import datetime, timedelta
 from django.db import models
+from cms.tasks import generate_batch_times_task
 from .abstracts import Slot
 from .batch import Batch
 
@@ -45,30 +45,9 @@ class BatchSlot(Slot):
         if overlapping_slots.exists():
             raise ValidationError("This batch has a conflicting time slot.")
 
-    def generate_batch_times(self):
-        from cms.models import BatchTime
-
-        BatchTime.objects.filter(batch_slot=self).delete()
-
-        current_date = self.batch.start_date
-        end_date = self.batch.end_date
-
-        while current_date.strftime('%a') != self.day:
-            current_date += timedelta(days=1)
-
-        while current_date <= end_date:
-            start_datetime = datetime.combine(current_date, self.start_time)
-            end_datetime = datetime.combine(current_date, self.end_time)
-
-            BatchTime.objects.create(
-                batch=self.batch,
-                batch_slot=self,
-                start_datetime=start_datetime,
-                end_datetime=end_datetime
-            )
-
-            current_date += timedelta(weeks=1)
-
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        self.generate_batch_times()
+        generate_batch_times_task.delay(self.id)
+
+    def __str__(self):
+        return f"{self.batch.code} | {self.day} | {self.start_time.strftime('%H:%M %p')} - {self.end_time.strftime('%H:%M %p')}"
