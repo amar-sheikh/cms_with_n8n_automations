@@ -1,0 +1,72 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Virtual Environment
+env/
+venv/
+ENV/
+.venv/
+*.env
+
+# Django specific
+*.log
+*.pot
+*.pyc
+*.sqlite3
+db.sqlite3
+media/
+staticfiles/
+local_settings.py
+*.secret
+*.json
+
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store
+
+# PyCharm
+.idea/
+
+# Coverage reports
+htmlcov/
+.coverage
+.tox/
+.nox/
+.cache/
+coverage.xml
+
+# Migrations (optional – if you want to ignore all)
+# **/migrations/
+# !**/migrations/__init__.py
+
+# pip tools
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Environment variable files
+.env
+.env.*
+
+# Gunicorn/PID files
+*.pid
+
+# Docker
+*.pid
+*.pid.lock
+docker-compose.override.yml
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+
+# MyPy
+.mypy_cache/
+.dmypy.json
+dmypy.json
