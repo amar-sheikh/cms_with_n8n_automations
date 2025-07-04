@@ -18,3 +18,6 @@ class InstructorSlot(Slot):
 
         if overlapping.exists():
             raise ValidationError("This instructor has a conflicting time slot.")
+
+    def __str__(self):
+        return f"{self.instructor} | {self.day} | {self.start_time.strftime('%H:%M %p')} - {self.end_time.strftime('%H:%M %p')}"
