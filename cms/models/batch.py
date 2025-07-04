@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from .course import Course
 from .instructor import Instructor
@@ -16,6 +17,11 @@ class Batch(models.Model):
 
     def __str__(self):
         return self.code
+
+    def clean(self):
+        super().clean()
+        if self.end_date < self.start_date:
+            raise ValidationError("End date cannot be earlier than start date.")
 
     class Meta:
         verbose_name_plural = 'Batches'
