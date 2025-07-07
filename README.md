@@ -27,3 +27,5 @@ This workflow automates file handling in the application via n8n. It is triggere
 - Automates cleanup of outdated files.
 
 ### Video
+https://github.com/user-attachments/assets/2591bcfb-bc92-40ed-9130-48dc2b4e5bf2
+
