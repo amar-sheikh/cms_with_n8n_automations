@@ -1,0 +1,39 @@
+{% extends 'layout.html' %}
+
+{% block title %}Parents | CMS{% endblock %}
+
+{% block content %}
+<h1 class="text-center mb-3">Parents</h1>
+<div class="d-flex justify-content-end"><a href="{% url 'parent-create' %}">Add parent</a></div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>EMAIL</th>
+            <th>STATUS</th>
+            <th>DATE OF BIRTH</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for parent in parents %}
+        <tr>
+            <th scope="row">{{ parent.pk }}</th>
+            <td>
+                {{ parent }}
+            </td>
+            <td>{{ parent.user.email }}</td>
+            <td>{{ parent.status }}</td>
+            <td>{{ parent.dob }}</td>
+            <td class="d-flex gap-2 justify-content-center">
+                <a href="{% url 'parent-update' parent.pk %}">Edit</a>
+                <a href="{% url 'parent-delete' parent.pk %}">Delete</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr class="text-center">No parent exists...</tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

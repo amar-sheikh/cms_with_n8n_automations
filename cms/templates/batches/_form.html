@@ -1,0 +1,144 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+{% if form.instance.pk %} Edit {% else %} New {% endif %} Batch | CMS
+{% endblock %}
+
+{% block content %}
+<h1 class="text-center">{% if form.instance.pk %} Update {% else %} Create {% endif %} batch</h1>
+<form method="post"
+    action="{% if form.instance.pk %}{% url 'batch-update' form.instance.pk %}{% else %}{% url 'batch-create' %}{% endif %}"
+    class="row">
+    {% csrf_token %}
+    <div class="col-4 mb-3">
+        <label for="code" class="form-label">Code</label>
+        <input id="code" name="code" class="form-control" value="{{ form.instance.code }}">
+        {% if form.code.errors %}
+        <div class="text-danger">
+            {{ form.code.errors }}
+        </div>
+        {% endif %}
+    </div>
+    {% if form.instance.pk %}
+    <div class="col-4 mb-3">
+        <label for="meeting_url" class="form-label">Meeting url</label>
+        <input id="meeting_url" name="meeting_url" class="form-control"
+            value="{{ form.instance.meeting_url|default:'' }}">
+        {% if form.meeting_url.errors %}
+        <div class="text-danger">
+            {{ form.meeting_url.errors }}
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+    <div class="col-4 mb-3">
+        <label for="{{ form.course.id_for_label }}" class="form-label">Course</label>
+        <select name="{{ form.course.html_name }}" id="{{ form.course.id_for_label }}" class="form-control">
+            {% for val, label in form.course.field.choices %}
+            <option value="{{ val }}" {% if form.course.value==val %}selected{% endif %}>
+                {{ label }}
+            </option>
+            {% endfor %}
+        </select>
+        {% if form.course.errors %}
+        <div class="text-danger">
+            {{ form.course.errors }}
+        </div>
+        {% endif %}
+    </div>
+    <div class="col-4 mb-3">
+        <label for="{{ form.instructor.id_for_label }}" class="form-label">Instructor</label>
+        <select name="{{ form.instructor.html_name }}" id="{{ form.instructor.id_for_label }}" class="form-control">
+            {% for val, label in form.instructor.field.choices %}
+            <option value="{{ val }}" {% if form.instructor.value==val %}selected{% endif %}>
+                {{ label }}
+            </option>
+            {% endfor %}
+        </select>
+        {% if form.instructor.errors %}
+        <div class="text-danger">
+            {{ form.instructor.errors }}
+        </div>
+        {% endif %}
+    </div>
+    <div class="col-4 mb-3">
+        <label for="{{ form.students.id_for_label }}" class="form-label">Students</label>
+        <select name="{{ form.students.html_name }}" id="{{ form.students.id_for_label }}" class="form-control"
+            multiple>
+            {% for val, label in form.students.field.choices %}
+            <option value="{{ val }}" {% if val in form.students.value|default:'' %}selected{% endif %}>
+                {{ label }}
+            </option>
+            {% endfor %}
+        </select>
+        {% if form.students.errors %}
+        <div class="text-danger">
+            {{ form.students.errors }}
+        </div>
+        {% endif %}
+    </div>
+    <div class="col-4 mb-3">
+        <label for="start_date" class="form-label">Start from</label>
+        <input id="start_date" name="start_date" type="date" class="form-control"
+            value="{{ form.instance.start_date|date:'Y-m-d' }}">
+        {% if form.start_date.errors %}
+        <div class="text-danger">
+            {{ form.start_date.errors }}
+        </div>
+        {% endif %}
+    </div>
+    <div class="col-4 mb-3">
+        <label for="end_date" class="form-label">Ends on</label>
+        <input id="end_date" name="end_date" type="date" class="form-control"
+            value="{{ form.instance.end_date|date:'Y-m-d' }}">
+        {% if form.end_date.errors %}
+        <div class="text-danger">
+            {{ form.end_date.errors }}
+        </div>
+        {% endif %}
+    </div>
+    <div class="col-4 mb-3">
+        <label for="color" class="form-label">Color</label>
+        <input id="color" name="color" class="form-control" value="{{ form.instance.color }}">
+        {% if form.color.errors %}
+        <div class="text-danger">
+            {{ form.color.errors }}
+        </div>
+        {% endif %}
+    </div>
+    <fieldset id="slot-container" class="col-12">
+        <legend>Batch Slots</legend>
+        {{ slot_formset.management_form }}
+
+        {% for slot_form in slot_formset %}
+        {% include 'instructors/_slot.html' with slot_form=slot_form %}
+        {% endfor %}
+
+        <div id="empty-form" class="d-none">
+            {% include 'instructors/_slot.html' with slot_form=slot_formset.empty_form %}
+        </div>
+        <button type="button" class="btn btn-success btn-sm add-slot">Add</button>
+
+    </fieldset>
+    <div class="col-12 mb-3 d-flex justify-content-end">
+        <button type="submit" class="btn btn-primary">
+            {% if form.instance.pk %} Update {% else %} Create {% endif %}
+        </button>
+    </div>
+</form>
+{% endblock %}
+
+{% block footer_scripts %}
+<script>
+    $(document).ready(function () {
+        let totalForms = $('#id_slot_formset-TOTAL_FORMS');
+
+        $('#slot-container').on('click', '.add-slot', function () {
+            const currentFormCount = parseInt(totalForms.val());
+            let $emptyForm = $('#empty-form').html().replace(/__prefix__/g, currentFormCount);
+            totalForms.val(currentFormCount + 1);
+            $('.add-slot').before($emptyForm);
+        });
+    });
+</script>
+{% endblock%}

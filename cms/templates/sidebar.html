@@ -1,0 +1,32 @@
+<div class="d-flex flex-column flex-shrink-0 p-3 bg-dark" style="width: 250px; height: 100vh;">
+    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-light text-decoration-none">
+        <span class="fs-4">CMS</span>
+    </a>
+    <hr>
+    <ul class="nav nav-pills flex-column mb-auto">
+        {% for url_name, text, icon in nav_links %}
+        {% url url_name as resolved_url %}
+        <li class="nav-item">
+            <a href="{{ resolved_url }}"
+                class="nav-link {% if request.path == resolved_url %}active{% else %}text-white{% endif %}">
+                <i class="{{icon}}"></i> {{ text }}
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+    <hr>
+    <div class="dropdown">
+        <a href="#" class="d-flex align-items-center link-light text-decoration-none dropdown-toggle" id="dropdownUser2"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-person-circle me-2"></i> <strong>User</strong>
+        </a>
+        <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
+            <li><a class="dropdown-item" href="#"><i class="bi bi-person-fill"></i> Profile</a></li>
+            <li><a class="dropdown-item" href="#"><i class="bi bi-gear-wide-connected"></i> Settings</a></li>
+            <li>
+                <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="#"><i class="bi bi-door-open"></i> Sign Out</a></li>
+        </ul>
+    </div>
+</div>

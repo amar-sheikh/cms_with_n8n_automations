@@ -1,0 +1,7 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<h1 class="text-center mb-3">Delete Batch</h1>
+<p>Are you sure you want to delete batch <strong>{{ batch.code }}</strong>?</p>
+<a href="{% url 'batch-delete' batch.pk %}" class="btn btn-danger">Delete Batch</a>
+{% endblock %}

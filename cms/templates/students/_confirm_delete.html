@@ -1,0 +1,7 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<h1 class="text-center mb-3">Delete Student</h1>
+<p>Are you sure you want to delete student <strong>{{ student }}</strong>?</p>
+<a href="{% url 'student-delete' student.pk %}" class="btn btn-danger">Delete Student</a>
+{% endblock %}

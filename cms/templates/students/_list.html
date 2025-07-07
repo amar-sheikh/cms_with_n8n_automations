@@ -1,0 +1,41 @@
+{% extends 'layout.html' %}
+
+{% block title %}Students | CMS{% endblock %}
+
+{% block content %}
+<h1 class="text-center mb-3">Students</h1>
+<div class="d-flex justify-content-end"><a href="{% url 'student-create' %}">Add student</a></div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>EMAIL</th>
+            <th>PARENT</th>
+            <th>STATUS</th>
+            <th>DATE OF BIRTH</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for student in students %}
+        <tr>
+            <th scope="row">{{ student.pk }}</th>
+            <td>
+                {{ student }}
+            </td>
+            <td>{{ student.user.email }}</td>
+            <td>{{ student.parent }}</td>
+            <td>{{ student.status }}</td>
+            <td>{{ student.dob }}</td>
+            <td class="d-flex gap-2 justify-content-center">
+                <a href="{% url 'student-update' student.pk %}">Edit</a>
+                <a href="{% url 'student-delete' student.pk %}">Delete</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr class="text-center">No student exists...</tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
