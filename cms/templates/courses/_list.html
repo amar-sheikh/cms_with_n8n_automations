@@ -4,8 +4,15 @@
 
 {% block header_scripts %}
 {% load static %}
-{% endblock %}
 
+<style>
+.course-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+</style>
+{% endblock %}
 
 {% block content %}
 <h1 class="text-center mb-3">Courses</h1>
@@ -14,7 +21,10 @@
     {% for course in courses %}
     <a href="{% url 'course-update' course.pk %}">
         <div class="card">
-            <img src="{{ course.image.url }}" class="card-img-top" alt="{{ course.title }} image">
+            {% static 'images/courses/default_image.jpeg' as fallback_image %}
+            {% with image=course.image.url|default:fallback_image %} 
+            <img src="{{ image }}" class="card-img-top course-image" alt="{{ course.title }} image">
+            {% endwith %}
             <div class="card-body">
                 <h5 class="card-title">{{ course.title }}</h5>
                 <p>{{ course.description }}</p>
