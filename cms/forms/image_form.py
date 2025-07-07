@@ -31,7 +31,7 @@ class ImageForm(forms.ModelForm):
         try:
             file_url, file_id = self.upload_to_google_drive(image, old_file_id)
             instance.url = file_url
-            instance.image_id = file_id
+            instance.image_id = file_id.lstrip('=')
         except Exception as e:
             instance.url = None
             instance.image_id = None
