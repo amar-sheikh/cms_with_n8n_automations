@@ -6,7 +6,7 @@ class BaseUserForm(forms.ModelForm):
     last_name = forms.CharField(max_length=150)
     email = forms.EmailField()
 
-def save(self, commit=True):
+    def save(self, commit=True):
         instance = super().save(commit=False)
         user = getattr(instance, 'user', None)
         if user is None:
@@ -22,3 +22,6 @@ def save(self, commit=True):
             instance.save()
 
         return instance
+
+    class Meta:
+        fields = [ 'first_name', 'last_name', 'email' ]

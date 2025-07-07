@@ -13,7 +13,7 @@
         <label class="form-label" for="{{ slot_form.day.id_for_label }}">Day</label>
         <select name="{{ slot_form.day.html_name }}" id="{{ slot_form.day.id_for_label }}" class="form-control">
             {% for val, label in slot_form.day.field.choices %}
-            <option value="{{ val }}" {% if slot_form.day.value==val %}selected{% endif %}>
+            <option value="{{ val }}" {% if slot_form.day.value == val %}selected{% endif %}>
                 {{ label }}
             </option>
             {% endfor %}
