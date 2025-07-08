@@ -3,6 +3,8 @@ from . import views
 
 urlpatterns = [
     path('', views.BatchListView.as_view(), name='home'),
+    path('upcomming-batches', views.get_upcoming_batches, name='upcomming_batches'),
+    path('mark_batches_notified', views.mark_notified, name='mark_batch_times_notified'),
     path('batches/', views.BatchListView.as_view(), name='batches'),
     path('batches/create/', views.BatchCreateView.as_view(), name='batch-create'),
     path('batches/<int:pk>/update/', views.BatchUpdateView.as_view(), name='batch-update'),

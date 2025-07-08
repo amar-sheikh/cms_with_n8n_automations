@@ -1,8 +1,12 @@
+from django.http.response import JsonResponse
+from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView
-from cms.models import BatchTime
+import json
 from datetime import datetime, timedelta
-from collections import defaultdict
 from calendar import monthrange, day_abbr
+from collections import defaultdict
+from cms.models import BatchTime, Batch, Student, Parent
 
 class BatchTimeListView(ListView):
     model = BatchTime
@@ -63,3 +67,96 @@ class BatchTimeListView(ListView):
                 grouped[hour_label].append(slots[i:i+4])
 
         return grouped.items()
+
+def get_upcoming_batches(request):
+    batch_times = BatchTime.objects.filter(
+        start_datetime__gte=timezone.now(),
+        start_datetime__lt=timezone.now() + timedelta(minutes=30),
+        notified=False
+    ).select_related('batch')
+
+    batches = Batch.objects.filter(times__in=batch_times)
+    students = Student.objects.filter(batches__in=batches).distinct()
+    parents = Parent.objects.filter(children__in=students, status='active').distinct()
+
+    parents_data = []
+    for parent in parents:
+        parent_data = {
+            'id': parent.id,
+            'name': str(parent),
+            'email': parent.user.email,
+            'dob': parent.dob,
+        }
+
+        children_data = []
+        for child in parent.children.filter(id__in=students, status='active'):
+            child_data = {
+                'id': child.id,
+                'name': str(child),
+                'email': child.user.email,
+                'status': child.status,
+                'dob': child.dob,
+            }
+
+            child_batches_data = []
+            for batch in child.batches.filter(id__in=batches):
+                batch_time = batch.times.filter(id__in=batch_times).first()
+                child_batches_data.append({
+                    'id': batch.id,
+                    'code': batch.code,
+                    'start_time': batch_time.start_datetime.strftime('%I:%M %p'),
+                    'end_time': batch_time.start_datetime.strftime('%I:%M %p'),
+                    'color': batch.color,
+                    'course': batch.course.title,
+                    'instructor': str(batch.instructor),
+                })
+
+            child_data['batches'] = child_batches_data
+            children_data.append(child_data)
+
+        parent_data['children'] = children_data
+        parents_data.append(parent_data)
+
+    batches_data = []
+    for batch in batches:
+        batch_time = batch.times.filter(id__in=batch_times).first()
+        batches_data.append({
+            'id': batch.id,
+            'code': batch.code,
+            'start_time': batch_time.start_datetime,
+            'end_time': batch_time.start_datetime,
+            'color': batch.color,
+            'course': batch.course.title,
+            'instructor': str(batch.instructor),
+            'instructor_email': batch.instructor.user.email,
+            'parents_emails': list(
+                parents.filter(children__in=batch.students.all())
+                .distinct()
+                .values_list('user__email', flat=True)
+            ),
+            'students_emails': list(batch.students.values_list('user__email'))
+        })
+
+    return JsonResponse({
+        'parents': parents_data,
+        'batches': batches_data
+    })
+
+@csrf_exempt
+def mark_notified(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            batches = data.get('batches', [])
+            for batch in batches:
+                BatchTime.objects.filter(
+                    batch__id=batch.get('id'),
+                    start_datetime=batch.get('start_time'),
+                    end_datetime=batch.get('end_time')
+                ).update(notified=True)
+
+            return JsonResponse({'message': 'Successfully updated'}, status=200)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+
+    return JsonResponse({'error': 'Only POST method allowed'}, status=405)
