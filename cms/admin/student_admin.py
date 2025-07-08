@@ -1,5 +1,6 @@
 from django.contrib import admin
 from cms.models import Student, Batch
+from cms.forms import StudentForm
 
 class BatchListFilter(admin.SimpleListFilter):
     title = "By Batch"
@@ -18,6 +19,7 @@ class BatchListFilter(admin.SimpleListFilter):
 
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
+    form = StudentForm
     list_filter = [ 'status', BatchListFilter ]
     list_display = [ 'full_name', 'parent', 'status', 'dob'  ]
     list_display_links = [ 'full_name', 'parent']
