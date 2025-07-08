@@ -70,3 +70,5 @@ docker-compose.override.yml
 .mypy_cache/
 .dmypy.json
 dmypy.json
+
+dump.rdb

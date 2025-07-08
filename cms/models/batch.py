@@ -10,7 +10,6 @@ class Batch(models.Model):
     students = models.ManyToManyField(Student, related_name='batches')
 
     code = models.CharField(max_length=255, unique=True, null=False, blank=False)
-    meeting_url = models.URLField(null=True, blank=True)
     start_date = models.DateField()
     end_date = models.DateField()
     color = models.CharField(max_length=20, unique=True)

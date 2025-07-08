@@ -31,7 +31,7 @@ class BatchSlotTabularAdmin(admin.TabularInline):
 @admin.register(Batch)
 class BatchAdmin(admin.ModelAdmin):
     list_filter = [ BatchStatusFilter, 'course', 'instructor', ]
-    list_display = [ 'code', 'instructor', 'meeting_url', 'status']
+    list_display = [ 'code', 'instructor', 'status']
     inlines = [BatchSlotTabularAdmin]
 
     @admin.display(description='Status')
