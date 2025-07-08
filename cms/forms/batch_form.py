@@ -10,7 +10,7 @@ class BatchForm(forms.ModelForm):
 
     class Meta:
         model = Batch
-        fields = ['code', 'meeting_url', 'course', 'instructor', 'students', 'start_date', 'end_date', 'color' ]
+        fields = ['code', 'course', 'instructor', 'students', 'start_date', 'end_date', 'color' ]
 
 BatchSlotCreateFormSet = forms.inlineformset_factory(
     Batch,
