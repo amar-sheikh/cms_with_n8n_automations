@@ -9,6 +9,9 @@ class InstructorSlot(Slot):
     def clean(self):
         super().clean()
 
+        if not self.instructor_id:
+            return
+
         overlapping = InstructorSlot.objects.filter(
             instructor=self.instructor,
             day=self.day,

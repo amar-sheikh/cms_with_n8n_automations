@@ -7,7 +7,15 @@
 ### Install necessary packages
     $ pip install -r requirements.txt
 ### Start the project
+Run the server
+
     $ python3 manage.py runserver
+Start redis
+
+    $ redis-server
+Run celery worker for project
+
+    $ celery -A project worker -l info
 
 ## n8n Workflow 1: File Upload and Google Drive Integration
 

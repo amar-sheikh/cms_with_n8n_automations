@@ -1,4 +1,5 @@
 from django.contrib import admin
+from cms.forms import InstructorForm
 from cms.models import Batch, Instructor, InstructorSlot
 
 class BatchListFilter(admin.SimpleListFilter):
@@ -22,6 +23,7 @@ class InstructorSlotAdmin(admin.TabularInline):
 
 @admin.register(Instructor)
 class InstructorAdmin(admin.ModelAdmin):
+    form = InstructorForm
     list_filter = [ 'status', BatchListFilter ]
     list_display = [ 'full_name', 'language', 'status', 'dob'  ]
     list_display_links = [ 'full_name']
