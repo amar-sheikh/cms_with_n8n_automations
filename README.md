@@ -20,6 +20,8 @@ Run ngrok to expose port 8000 (to allow making http request from n8n to localhos
 
     $ ngrok http 8000
 
+Note: settings.DEBUG must be false
+
 ## n8n Workflow 1: File Upload and Google Drive Integration
 
 This workflow automates file handling in the application via n8n. It is triggered through a webhook upon file upload and performs the following steps:
