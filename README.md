@@ -16,6 +16,9 @@ Start redis
 Run celery worker for project
 
     $ celery -A project worker -l info
+Run ngrok to expose port 8000 (to allow making http request from n8n to localhost:8000)
+
+    $ ngrok http 8000
 
 ## n8n Workflow 1: File Upload and Google Drive Integration
 
