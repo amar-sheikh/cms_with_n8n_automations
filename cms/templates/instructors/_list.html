@@ -1,0 +1,41 @@
+{% extends 'layout.html' %}
+
+{% block title %}Instructors | CMS{% endblock %}
+
+{% block content %}
+<h1 class="text-center mb-3">Instructors</h1>
+<div class="d-flex justify-content-end"><a href="{% url 'instructor-create' %}">Add instructor</a></div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>EMAIL</th>
+            <th>PARENT</th>
+            <th>STATUS</th>
+            <th>DATE OF BIRTH</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for instructor in instructors %}
+        <tr>
+            <th scope="row">{{ instructor.pk }}</th>
+            <td>
+                {{ instructor }}
+            </td>
+            <td>{{ instructor.user.email }}</td>
+            <td>{{ instructor.parent }}</td>
+            <td>{{ instructor.status }}</td>
+            <td>{{ instructor.dob }}</td>
+            <td class="d-flex gap-2 justify-content-center">
+                <a href="{% url 'instructor-update' instructor.pk %}">Edit</a>
+                <a href="{% url 'instructor-delete' instructor.pk %}">Delete</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr class="text-center">No instructor exists...</tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'layout.html' %}
+
+{% block title %}Batches | CMS{% endblock %}
+
+{% block content %}
+<h1 class="text-center mb-3">Batches</h1>
+<div class="d-flex justify-content-end"><a href="{% url 'batch-create' %}">Add batch</a></div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>CODE</th>
+            <th>COURSE</th>
+            <th>INSTRUCTOR</th>
+            <th>START DATE</th>
+            <th>END DATE</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for batch in batches %}
+        <tr>
+            <th scope="row">{{ batch.pk }}</th>
+            <td>
+                {{ batch.code }}
+            </td>
+            <td>{{ batch.course.title }}</td>
+            <td>{{ batch.instructor }}</td>
+            <td>{{ batch.start_date }}</td>
+            <td>{{ batch.end_date }}</td>
+            <td class="d-flex gap-2 justify-content-center">
+                <a href="{% url 'batch-update' batch.pk %}">Edit</a>
+                <a href="{% url 'batch-delete' batch.pk %}">Delete</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr class="text-center">No batch exists...</tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

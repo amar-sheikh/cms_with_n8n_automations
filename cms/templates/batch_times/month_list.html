@@ -1,0 +1,24 @@
+<table class="table table-bordered" style="padding: 0;">
+    <thead>
+        <tr>
+            {% for day in day_names %}
+            <th class="text-center">{{ day }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for week in month_weeks %}
+        <tr>
+            {% for day in week %}
+            <td>
+                <div class="d-flex flex-wrap justify-content-around">
+                    <a class="w-100 border p-2 {% if today == day %}bg-primary text-white{% elif day != '' %}bg-white{% else %}bg-light{% endif %}"
+                        style="height: 80px; margin: 1px;" data-bs-toggle="tooltip" data-bs-placement="right"
+                        title="{{ day }}">{{ day|date:"j" }}</a>
+                </div>
+            </td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

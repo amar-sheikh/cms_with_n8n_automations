@@ -1,0 +1,7 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<h1 class="text-center mb-3">Delete Parent</h1>
+<p>Are you sure you want to delete parent <strong>{{ parent }}</strong>?</p>
+<a href="{% url 'parent-delete' parent.pk %}" class="btn btn-danger">Delete Parent</a>
+{% endblock %}

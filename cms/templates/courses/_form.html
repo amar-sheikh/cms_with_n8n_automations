@@ -1,0 +1,65 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+{% if form.instance.pk %} Edit {% else %} New {% endif %} Course | CMS
+{% endblock %}
+
+{% block content %}
+<h1 class="text-center">{% if form.instance.pk %} Update {% else %} Create {% endif %} course</h1>
+<form method="post" enctype="multipart/form-data"
+    action="{% if form.instance.pk %}{% url 'course-update' form.instance.pk %}{% else %}{% url 'course-create' %}{% endif %}"
+    class="row">
+    {% csrf_token %}
+    <div class="col-6 mb-3">
+        <label for="{{ form.title.id_for_label }}" class="form-label">Title</label>
+        <input id="{{ form.title.id_for_label }}" name="{{ form.title.html_name }}" value="{{ form.instance.title }}"
+            class="form-control">
+        {% if form.title.errors %}
+        <div class="text-danger">
+            {{ form.title.errors }}
+        </div>
+        {% endif %}
+    </div>
+    <div class="col-6 mb-3">
+        <label for="{{ form.language.id_for_label }}" class="form-label">Language</label>
+        <input id="{{ form.language.id_for_label }}" name="{{ form.language.html_name }}"
+            value="{{ form.instance.language }}" class="form-control">
+        {% if form.language.errors %}
+        <div class="text-danger">
+            {{ form.language.errors }}
+        </div>
+        {% endif %}
+    </div>
+    <div class="col-6 mb-3">
+        <label for="{{ form.image.id_for_label }}" class="form-label">Image</label>
+        <input type="file" id="{{ form.image.id_for_label }}" name="{{ form.image.html_name }}" class="form-control">
+        {% if form.image.errors %}
+        <div class="text-danger">
+            {{ form.image.errors }}
+        </div>
+        {% endif %}
+    </div>
+    {% if form.instance.pk %}
+    <div class="text-success col-6 mb-3 d-flex align-items-center">
+        <div>
+            Upload image only if you want to change the image.
+        </div>
+    </div>
+    {% endif %}
+    <div class="col-12 mb-3">
+        <label for="{{ form.description.id_for_label }}" class="form-label">Description</label>
+        <textarea id="{{ form.description.id_for_label }}" name="{{ form.description.html_name }}"
+            class="form-control">{{ form.instance.description }}</textarea>
+        {% if form.description.errors %}
+        <div class="text-danger">
+            {{ form.description.errors }}
+        </div>
+        {% endif %}
+    </div>
+    <div class="col-12 mb-3 d-flex justify-content-end">
+        <button type="submit" class="btn btn-primary">
+            {% if form.instance.pk %} Update {% else %} Create {% endif %}
+        </button>
+    </div>
+</form>
+{% endblock %}

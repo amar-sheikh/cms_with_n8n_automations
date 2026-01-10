@@ -1,0 +1,27 @@
+<table class="table table-bordered" style="padding: 0;">
+    <thead>
+        <tr>
+            <th></th>
+            {% for day in days %}
+            <th class="text-center" colspan="4">{{ day }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for hour, time_groups in grouped_day_slots %}
+        <tr>
+            <th class="d-flex justify-content-center align-items-center" style="height: 54px;">
+                <div>{{ hour }}</div>
+            </th>
+            {% for time_group in time_groups %}
+            {% for time in time_group %}
+            <td>
+                <a class="d-block border text-center {% if today == date %}bg-primary{% else %}bg-light{% endif %}"
+                    data-bs-toggle="tooltip" data-bs-placement="right" style="height: 54px;" title="{{ time }}"></a>
+            </td>
+            {% endfor %}
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
